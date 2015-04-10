@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen android:key="sketchy_preferences"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<PreferenceCategory android:title="General">
+
+	<EditTextPreference
+		android:key="imageSize"
+		android:title="imageSize"
+		android:numeric="integer"/>
+
+	<CheckBoxPreference
+		android:key="restoreDefaults"
+		android:title="restoreDefaults"/>
+		
+
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="Canny edge detector">
+	
+	<EditTextPreference
+		android:key="lowThreshold"
+		android:title="lowThreshold"
+		android:numeric="decimal"/>
+	
+	<EditTextPreference
+		android:key="highThreshold"
+		android:title="highThreshold"
+		android:numeric="decimal"/>
+	
+	<EditTextPreference
+		android:key="gaussianKernelRadius"
+		android:title="gaussianKernelRadius"
+		android:numeric="decimal"/>
+		
+	
+	<EditTextPreference
+		android:key="gaussianKernelWidth"
+		android:title="gaussianKernelWidth"
+		android:numeric="decimal"/>
+
+ 			
+	<CheckBoxPreference
+		android:key="contrastNormalized"
+		android:title="contrastNormalized"/>
+		
+	</PreferenceCategory>
+
+  	<PreferenceCategory android:title="VectorWalker vectoriser">
+  	
+  	<EditTextPreference
+		android:key="shortLineLimit"
+		android:title="shortLineLimit"
+		android:numeric="integer"/>
+  	
+  	<EditTextPreference
+		android:key="lineBendLimit"
+		android:title="lineBendLimit"
+		android:numeric="integer"/>
+  		
+  		
+   	</PreferenceCategory>	
+		
+
+	
+</PreferenceScreen>
+  

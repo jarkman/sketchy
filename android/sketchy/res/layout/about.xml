@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" android:layout_gravity="center">  
+
+          
+    
+       
+<LinearLayout android:id="@+id/LinearLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" 
+			android:text="Sketchy" android:layout_gravity="center" android:textSize="30dp" android:layout_margin="15dp"></TextView>
+
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" 
+			android:layout_gravity="center" android:textSize="20dp" android:layout_margin="8dp" android:text="A Dorkbot Bristol / Jarkman Industries production"></TextView>
+			
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" 
+		android:text="http://jarkman.co.uk/catalog/robots/sketchy.htm"
+		 android:layout_gravity="center" android:textSize="20dp" android:autoLink="all" android:layout_margin="8dp"></TextView>
+		 
+		 
+<ImageView android:layout_width="250dp" android:layout_height="250dp" 
+		android:layout_gravity="center" android:background="@drawable/qrcode"></ImageView>
+
+	
+ 	 
+</LinearLayout>
+</ScrollView>

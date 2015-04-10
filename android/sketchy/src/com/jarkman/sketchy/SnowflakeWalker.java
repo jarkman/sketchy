@@ -526,12 +526,14 @@ public class SnowflakeWalker {
 		}
 		
 		
-		if( points > 253 )  // Arduino can actually manage 300 points, but we send the number of points in a single byte, so the limit is set a bit lower...
+		if( points > 253 )  // Arduino can actually manage 300 points, but we were sending the number of points in a single byte, so the limit is set a bit lower...
 			points = 253;
 		
-		mSend = new byte[ 1 + 3 * points ];
+		// as of 1.1, 10/4/2015, we send the number of points as two bytes to support Giant Sketchy
+		mSend = new byte[ 2 + 3 * points ];
 		nextSend = 0;
-		mSend[nextSend++] = (byte) points;
+		mSend[nextSend++] = (byte) (points & 0xff);
+		mSend[nextSend++] = (byte) (points >> 8);
 		
 		
 		for( int v = 0; v < mPointLists.size(); v ++ )

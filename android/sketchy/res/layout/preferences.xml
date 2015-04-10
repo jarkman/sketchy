@@ -4,6 +4,11 @@
 
 	<PreferenceCategory android:title="General">
 
+	<CheckBoxPreference
+		android:key="giantSketchy"
+		android:title="Giant Sketchy mode"/>
+	    
+	    	
 	<EditTextPreference
 		android:key="imageSize"
 		android:title="imageSize"

@@ -40,7 +40,7 @@ public class VectorWalker {
 	
 	Point mDirections[] = new Point[8];
 	
-
+	boolean giantSketchy;
 	
 
 	public VectorWalker( Sketchy sketchy, Bitmap source, Bitmap vectorImage, Canvas vectorCanvas )
@@ -58,6 +58,7 @@ public class VectorWalker {
 		mVectorBitmap = vectorImage;
 		mVectorCanvas = vectorCanvas;
 		
+	 	
 		// clockwise sequence
 		mDirections[0]=new Point(1, 0);
 		mDirections[1]=new Point(1, 1);
@@ -68,11 +69,12 @@ public class VectorWalker {
 		mDirections[6]=new Point(0, -1);
 		mDirections[7]=new Point(1, -1);
 		
-		 SharedPreferences prefs=PreferenceManager.getDefaultSharedPreferences(sketchy);
+		SharedPreferences prefs=PreferenceManager.getDefaultSharedPreferences(sketchy);
 
 	   	String shortLineLimitS = prefs.getString("shortLineLimit", "5");  // real default is set in Settings
 	  	String lineBendLimitS = prefs.getString("lineBendLimit", "1");
-
+	  	giantSketchy = prefs.getBoolean("giantSketchy", false);
+	  	
 	  	mShortLineLimit = (Integer.valueOf(shortLineLimitS) * mSketchy.mImageWidth) / Settings.mBaseImageWidth;
 
 	  	mLineBendLimit = (Integer.valueOf(lineBendLimitS) * mSketchy.mImageWidth) / Settings.mBaseImageWidth;
@@ -602,12 +604,31 @@ public class VectorWalker {
 		}
 		
 		
-		if( points > 253 )  // Arduino can actually manage 300 points, but we send the number of points in a single byte, so the limit is set a bit lower...
-			points = 253;
+		int limit;
 		
-		mSend = new byte[ 1 + 3 * points ];
-		nextSend = 0;
-		mSend[nextSend++] = (byte) points;
+	 	if( giantSketchy )
+	 		limit = 7*1024/3; // use 7k on a Mega
+	 	else
+	 		limit = 253; // Arduino can actually manage 300 points, but we were sending the number of points in a single byte, so the limit is set a bit lower...
+	 	
+		if( points > limit )  
+			points = limit;
+		
+		if( giantSketchy )
+		{
+		// as of 1.1, 10/4/2015, we send the number of points as two bytes to support Giant Sketchy
+			mSend = new byte[ 2 + 3 * points ];
+			nextSend = 0;
+			mSend[nextSend++] = (byte) (points & 0xff); //    ANTON - note that this will need a change in the giant sketchy Ardiuno code!
+			mSend[nextSend++] = (byte) (points >> 8);
+		}
+		else
+		{
+			// old format for little Sketchy
+			mSend = new byte[ 1 + 3 * points ];
+			nextSend = 0;
+			mSend[nextSend++] = (byte) (points);
+		}
 		
 		// Added initial send of first point 20/5/11 as a voodoo fix for a strange problem in which an extraneous line was drawn before proper drawing began
 		
@@ -642,8 +663,15 @@ public class VectorWalker {
 		if( nextSend > mSend.length - 3 )
 			return;
 		
-		int maxPenDisplacement = 80; // mechanical limit in mm to scale to
+		int maxPenDisplacement;
+		
+		if( giantSketchy )
+			maxPenDisplacement= 125;  //    ANTON - is this a suitable limit for GS ? Note that a bigger limit needs us to change the 1-byte-per-coord structure blow, here and in the GS Arduino code.
+		else
+			maxPenDisplacement= 80; // mechanical limit in mm to scale to
+		
 		// nb - our protocol uses bytes for mm - a bigger machine needs a better protocol!
+		
 		
 		// scale x & y from 0->maxX to -maxPenDisplacement->+maxPendDisplacement, then add 127
 		

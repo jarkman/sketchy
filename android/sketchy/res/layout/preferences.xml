@@ -66,6 +66,20 @@
   		
    	</PreferenceCategory>	
 		
+  	<PreferenceCategory android:title="VectorWalker line weight">
+  	
+  	<EditTextPreference
+		android:key="heavyLineLimit"
+		android:title="heavyLineLimit"
+		android:numeric="integer"/>
+  	
+  	<EditTextPreference
+		android:key="heavyLineHeight"
+		android:title="heavyLineHeight"
+		android:numeric="integer"/>
+  		
+  		
+   	</PreferenceCategory>	
 
 	
 </PreferenceScreen>

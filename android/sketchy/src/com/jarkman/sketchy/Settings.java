@@ -64,6 +64,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	private static String shortLineLimitDefault = "50"; //"40";
 	private static String lineBendLimitDefault = "20"; // changed from "8"; 20/5/11  
 	
+	private static String heavyLineLimitDefault = "300"; 
+	private static String heavyLineHeightDefault = "3"; 
+	
 	private static void setPrefs( SharedPreferences prefs, Context context, boolean force )
 	{
 	    // general
@@ -80,6 +83,11 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	 	String shortLineLimit = prefs.getString("shortLineLimit", shortLineLimitDefault);
 	 	String lineBendLimit = prefs.getString("lineBendLimit", lineBendLimitDefault);
 
+	 	// line weight
+	 	String heavyLineLimit = prefs.getString("heavyLineLimit", heavyLineLimitDefault);
+	 	String heavyLineHeight = prefs.getString("heavyLineHeight", heavyLineHeightDefault);
+
+	 	
 	 	 if( force )
 	 	 {
 	 		imageSize = imageSizeDefault;
@@ -94,6 +102,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		 	// vectorwalker
 		 	shortLineLimit = shortLineLimitDefault;
 		 	lineBendLimit = lineBendLimitDefault;
+		 	
+		 	heavyLineLimit = heavyLineLimitDefault;
+		 	heavyLineHeight = heavyLineHeightDefault;
 	 	 }
 	 	 
 		SharedPreferences.Editor editor = prefs.edit();
@@ -108,6 +119,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		editor.putBoolean("contrastNormalized", contrastNormalized);
 		editor.putString("shortLineLimit", shortLineLimit);
 		editor.putString("lineBendLimit", lineBendLimit);
+		editor.putString("heavyLineLimit", heavyLineLimit);
+		editor.putString("heavyLineHeight", heavyLineHeight);
 	
 		editor.commit();
 	}
@@ -129,7 +142,10 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	 	String shortLineLimit = prefs.getString("shortLineLimit", shortLineLimitDefault);
 	 	String lineBendLimit = prefs.getString("lineBendLimit", lineBendLimitDefault);
 
-	 	
+	 	// line weight
+	 	String heavyLineLimit = prefs.getString("heavyLineLimit", heavyLineLimitDefault);
+	 	String heavyLineHeight = prefs.getString("heavyLineHeight", heavyLineHeightDefault);
+
 	 	
 	    getPreferenceScreen().findPreference("imageSize").setSummary(imageSize + " px (" + imageSizeDefault + ")");
 	    getPreferenceScreen().findPreference("lowThreshold").setSummary(lowThreshold + " (" + lowThresholdDefault + ")");
@@ -138,6 +154,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	    getPreferenceScreen().findPreference("gaussianKernelWidth").setSummary(gaussianKernelWidth + " px (" + gaussianKernelWidthDefault + ")");
 	    getPreferenceScreen().findPreference("shortLineLimit").setSummary(shortLineLimit + " px (" + shortLineLimitDefault + ")");
 	    getPreferenceScreen().findPreference("lineBendLimit").setSummary(lineBendLimit + " px (" + lineBendLimitDefault + ")");
+	    getPreferenceScreen().findPreference("heavyLineLimit").setSummary(heavyLineLimit + " px (" + heavyLineLimitDefault + ")");
+	    getPreferenceScreen().findPreference("heavyLineHeight").setSummary(heavyLineHeight + " mm (" + heavyLineHeightDefault + ")");
 	   
 	}
 	

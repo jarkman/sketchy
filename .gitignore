@@ -1,3 +1,6 @@
 /android/sketchy/bin
 /android/.metadata
 /android/RemoteSystemsTempFiles
+*.cache
+
+*.cache

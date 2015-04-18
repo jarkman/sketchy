@@ -24,9 +24,12 @@ public class VectorWalker {
 
 	int maxX ; 
 	int maxY;
-	int mShortLineLimit = 5;  // must be at least 2 to avoid limit problems in simplify
+	int mShortLineLimit = 5;  // must be at least 2 to avoid limit problems in simplify - real defaults are set in Settings.java!
 	int mLineBendLimit = 1;  // limit on line wiggle displacement in simplification 
 	
+	int mHeavyLineLimit;
+ 	int mHeavyLineHeight;
+ 			
 	boolean [][] mPixels;
 	boolean [][] mWalked;
 	
@@ -73,11 +76,17 @@ public class VectorWalker {
 
 	   	String shortLineLimitS = prefs.getString("shortLineLimit", "5");  // real default is set in Settings
 	  	String lineBendLimitS = prefs.getString("lineBendLimit", "1");
+	  	String heavyLineLimitS = prefs.getString("heavyLineLimit", "1");
+	  	String heavyLineHeightS = prefs.getString("heavyLineHeight", "1");
+	  	
 	  	giantSketchy = prefs.getBoolean("giantSketchy", false);
 	  	
+	  	// Scale lengths from our nominal 1024 used for the settings to the actual width of our image
 	  	mShortLineLimit = (Integer.valueOf(shortLineLimitS) * mSketchy.mImageWidth) / Settings.mBaseImageWidth;
-
 	  	mLineBendLimit = (Integer.valueOf(lineBendLimitS) * mSketchy.mImageWidth) / Settings.mBaseImageWidth;
+
+	  	mHeavyLineLimit = (Integer.valueOf(heavyLineLimitS) * mSketchy.mImageWidth) / Settings.mBaseImageWidth;
+	  	mHeavyLineHeight = Integer.valueOf(heavyLineHeightS) ;
 
 	 	
 	 	
@@ -518,7 +527,7 @@ public class VectorWalker {
 
 	}
 	
-	private int d( Point a, Point b  )
+	private int d( Point a, Point b  ) // approximate length of vector
 	{
 		return( Math.abs( a.x-b.x ) + Math.abs(a.y-b.y));
 	}
@@ -600,14 +609,14 @@ public class VectorWalker {
 		for( int v = 0; v < mPointLists.size(); v ++ )
 		{
 			Vector pointList = (Vector) mPointLists.get(v);
-			points += (pointList.size() + 2);
+			points += (pointList.size() + 2); // add 2 for our hardcoded start and end points for each vector
 		}
 		
 		
 		int limit;
 		
 	 	if( giantSketchy )
-	 		limit = 7*1024/3; // use 7k on a Mega
+	 		limit = 2048; // uses less than 7k on a Mega
 	 	else
 	 		limit = 253; // Arduino can actually manage 300 points, but we were sending the number of points in a single byte, so the limit is set a bit lower...
 	 	
@@ -645,10 +654,12 @@ public class VectorWalker {
 			
 			sendPoint( start, -10 );
 			
+			int z = penHeightForVector( pointList );
+			
 			for( int p = 0; p < pointList.size(); p ++ )	
 		    {	
 				Point point = (Point) pointList.get(p);
-				sendPoint( point, 0 );
+				sendPoint( point, z );
 		    	
 		    	start = point;
 		    }
@@ -656,6 +667,39 @@ public class VectorWalker {
 			sendPoint( start, -10 );
 		  }
 	
+	}
+	
+	int penHeightForVector( Vector pointList ) // 0 for the default case, slightly larger for longer lines
+	{
+		int z = 0;
+		int vectorLength = vectorLength( pointList );
+		
+		if( vectorLength > mHeavyLineLimit )
+			vectorLength = mHeavyLineLimit;
+		
+		// Increases linearly with vector length up to the limit length
+		z = (mHeavyLineHeight * vectorLength )/ mHeavyLineLimit;
+		
+		return z;
+	}
+	
+	int vectorLength( Vector pointList )
+	{
+		int l = 0;
+		if( pointList.size() < 2)
+			return 0;
+		
+		Point start = (Point) pointList.get(0);
+		
+		for( int p = 1; p < pointList.size(); p ++ )	
+	    {	
+			Point point = (Point) pointList.get(p);
+			l += d( start, point );
+	    	
+	    	start = point;
+	    }
+		
+		return l;
 	}
 	
 	private void sendPoint( Point p, int z )

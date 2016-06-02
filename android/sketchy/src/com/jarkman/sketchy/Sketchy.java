@@ -532,21 +532,28 @@ public class Sketchy extends Activity {
         	{
         		final Bundle extras = data.getExtras();
 
-				Bitmap bitmap = extras.getParcelable("data");
-				
-				if( bitmap == null )
-				{
-					//EPLog.i( TAG, "No bitmap - can't save");				
-				}
-				else
-				{
-					mOutputImageView.setVisibility(View.GONE);
+        		if( extras == null )
+        		{
+        			//EPLog.i( TAG, "No extras for bitmap - can't save");
+        		}
+        		else
+        		{
+					Bitmap bitmap = extras.getParcelable("data");
 					
-					//EPLog.i( TAG, "Storing pick & cropped photo from bitmap");
-					mInputBitmap = bitmap;
-					mPhotoImageView.setImageBitmap(mInputBitmap);
-
-				}
+					if( bitmap == null )
+					{
+						//EPLog.i( TAG, "No bitmap - can't save");				
+					}
+					else
+					{
+						mOutputImageView.setVisibility(View.GONE);
+						
+						//EPLog.i( TAG, "Storing pick & cropped photo from bitmap");
+						mInputBitmap = bitmap;
+						mPhotoImageView.setImageBitmap(mInputBitmap);
+	
+					}
+        		}
     		}
     		break;
     		

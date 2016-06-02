@@ -534,6 +534,7 @@ public class Sketchy extends Activity {
 
         		if( extras == null )
         		{
+        			//seeing this on Nexus 6    
         			//EPLog.i( TAG, "No extras for bitmap - can't save");
         		}
         		else

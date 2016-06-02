@@ -139,7 +139,10 @@ public class VectorWalker {
 
 			for( int y = 0; y < maxY; y ++)
 			{
-				int color = mEdgeBitmap.getPixel(x, y);
+				int color = 0;
+				
+				if( x < mEdgeBitmap.getWidth() && y < mEdgeBitmap.getHeight() ) // hiding a mysterious bug in which maxY was equal to mEdgeBitmapo.getHeight()
+					color = mEdgeBitmap.getPixel(x, y);
 				mPixels[x][y] = color == -1; // as left by Canny
 			}
 		}

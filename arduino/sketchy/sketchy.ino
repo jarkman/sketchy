@@ -1,6 +1,13 @@
 //#include <NewSoftSerial.h>
 
 
+// Sketchy
+//
+// Runs on an Arduino Duemilanova and an RN41 bluetooth module
+// See http://www.jarkman.co.uk/catalog/robots/sketchy.htm for details
+// Code lives at https://github.com/jarkman/sketchy
+
+
 #include <Servo.h> 
  
 #define  DO_LOGGING
